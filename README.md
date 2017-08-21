@@ -12,10 +12,13 @@
 
 下面以我做过的一个页面为例，左边是sketch文件的截图，右边是psd文件导出的图片。
 
-<img src="./image/sketch.png" height = "400" alt="sketch" />
+<div>
+<img src="./image/sketch.png" height = "400" alt="sketch" />&nbsp;&nbsp;&nbsp;
 <img src="./image/mark.png" height = "400" alt="png" />
-  
-这个页面很典型，因为涉及到了移动端适配的几个问题：
+<div> 
+
+这个页面涉及到了移动端适配的几个问题:
+
 
 - 布局适配，不同屏幕尺寸的设备中布局一致
 - 图片高清适配，不同分辨率设备中图片高清展示
@@ -36,19 +39,40 @@
 
 所以我们得想办法，让页面横向内容都展示在屏幕可视范围中，并且禁止缩放。有两种办法：
 
-**1、 设置布局视口宽度为一个定值，然后按照布局视口的宽度与屏幕宽度的比例缩放**
+### 1、 设置布局视口宽度为一个定值，然后按照布局视口的宽度与屏幕宽度的比例缩放
 
   比如屏幕宽375px，视觉稿750px，那就设置布局视口的宽度width=750，
-  scale = 375 / 750 = 0.5。当然这是需要根据屏幕宽度动态设置的。
+  scale = 375 / 750 = 0.5
   
-  比如屏幕宽320px，视觉稿750px，那就设置布局视口的宽度width=750，
-  scale = 320 / 750 。当然这是需要根据屏幕宽度动态设置的。
-  
-```
+```xml
 <meta name="viewport" content="width=750,initial-scale=0.5,maximum-scale=0.5,user-scalable=no">
 ```
+  
+  再比如屏幕宽320px，视觉稿750px，那就设置布局视口的宽度width=750，
+  scale = 320 / 750 
+  
+当然这是需要根据屏幕宽度动态设置的:
 
-[demo]()		
+```javascript
+(function(){
+	var doc = window.document;
+	var metaEl = doc.querySelector('meta[name="viewport"]');
+	if(!metaEl){
+		metaEl = doc.createElement("meta");
+		metaEl.setAttribute("name", "viewport");
+	}
+	var metaCtt = metaEl ? metaEl.content : '';
+	var matchWidth = metaCtt.match(/width=([^,\s]+)/);
+	var width = matchWidth ? matchWidth[1] : 750
+	if(width == 'device-width'){return}
+	
+	var screenWidth = window.screen.width;
+	var scale = screenWidth/width;
+	metaEl.setAttribute("content", "width="+ width +",user-scalable=no,initial-scale=" + scale + ",maximum-scale=" + scale + ",minimum-scale=" + scale);
+})()
+```
+
+[demo1](./demo1/demo1.html)		
 
 下面是依次在iphone6 plus，iphone6，iphone5上的展示效果。
 
@@ -75,7 +99,6 @@
 - 布局适配的问题
 
 	其实直接从上面的对比图就可以看出来，在不同设备上布局是一致的。	
-	
 	原理很简单： 我们写CSS本来就是按视觉稿来写的，然后整体缩放，以适应各种宽度的设备，元素的比例没有变。
 
 
@@ -86,7 +109,7 @@
   这个主要看视觉规范怎么定，有的觉得这样挺好，有的就希望字体大小都一样，还有的希望字体大小不是根据屏幕大小按比例缩放而是对一定范围内的屏幕宽度设定特定的字体大小。
 
 
-【总结】
+#### 总结
 
 	【原理】设定布局视口宽度为视觉稿画布宽度，动态设置缩放比例scale=屏幕宽度/视觉稿画布宽度
 	【优点】实现简单，可解决不同屏幕大小的布局问题，在各种屏幕上布局一致
@@ -96,16 +119,17 @@
 		- 缩放值依赖于屏幕宽度，demo里是通过screen.width获取屏幕宽度的，这在chrome里iphone6返回的是屏幕宽度值375，但在其他浏览器就不一定了，比如safari中返回的是1280。
 		- 所有元素都会缩放，比如字体，在iphone5上就会小很多，这不一定是大家想要的。
 
-**2、 设置布局视口的宽度 = 设备宽度**
+### 2、 设置布局视口的宽度 = 设备宽度
 
 ```xml
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 ```
 这种情况下有什么效果呢？
 
-[demo2]()
+[demo2](./demo2/demo2.html)
 
 图片太长，横着放了^^
+
 <img src="./demo2/demo2-iPhone6.png" width="600"/>
 
 看看看，都被挤掉了，为啥？	
@@ -161,11 +185,13 @@ img{
 	
 	文字大小统统一样，也没有解决。
 	
-**2.1、1个css像素实际只占1个物理像素**
+#### 2.1、让1个css像素只占1个物理像素
 
 前面已经讲了几遍了，要解决图片高清和1px边框的问题，达到在不同分辨率设备上效果一致（当然也与视觉稿一致），需要让不同分辨率设备上 **1个css像素只覆盖一个物理像素**。
 
 前面我们将750视觉稿中的尺寸除以2来编写样式，只能在iphone6上的效果满足。那现在我们在布局宽度=屏幕宽度时，让缩放比例为 1/dpr，就可以让**1个css像素只覆盖一个物理像素**。
+
+<img src="./image/scale_pixcel.png"/>
 
 比如750的视觉稿，元素边框1px，我们CSS样式也写：
 
@@ -193,9 +219,10 @@ if (!metaEl) {
 metaEl.setAttribute("content", "width=device-width,user-scalable=no,initial-scale=" + scale + ",maximum-scale=" + scale + ",minimum-scale=" + scale);
 ```
 那现在无论什么分辨率的设备，1个css像素实际只占1个物理像素了。
-**这里缺立体图**原本css像素与物理像素的关系 > 缩放后css像素与物理像素的关系
 
 那现在效果是什么样子呢？
+
+[demo3](./demo3/demo3.html)
 
 <img src="./demo3/demo3_200_200.png"/>
 
@@ -205,7 +232,7 @@ metaEl.setAttribute("content", "width=device-width,user-scalable=no,initial-scal
 
 
 
-**2.2、解决布局适配问题**
+#### 2.2、解决布局适配问题
 
 
 可以看下demo3的图
@@ -284,31 +311,71 @@ setTimeout(function(){
 ```
 
 最后的效果是： 
+
+[demo4](./demo4/demo4.html)
+
 <img src="./demo4/demo4_200_200_10.png">
-总结：
 
-原理： 设置html元素的font-size与布局视口宽度成比例，css样式使用相对单位rem，元素尺寸也就与布局视口宽度成比例，从而在每个设备布局一致。用视觉稿来确定这个比例值就能与视觉稿的布局一致。
+#### 总结
 
-设置缩放比例为 1/dpr可以解决 1px边框 和图片高清的问题。
+1、 设置html元素的font-size与布局视口宽度成比例，css样式使用相对单位rem，元素尺寸也就与布局视口宽度成比例，从而在每个设备布局一致。用视觉稿来确定这个比例值就能与视觉稿的布局一致。
 
+2、 设置缩放比例为 1/dpr可以解决 1px边框 和图片高清的问题。
+ 
+ 
+ 
 为了rem与px换算方便，选定的比例值可以让html元素的font-size为100px。
 iphone6就是7.5，iphone5就是6.4，不同基准的视觉稿rem与px换算比例都是100. 
 
 最后，如果不想动态适配的内容，可以直接使用px单位，比如字体。
 
+### 各大知名网站的做法
+这里讲的适配方案是今天[2017-08-11]的，以后网站方案可能会有改动，所以我把代码保存下来了，可以看**适配代码**
 
+**1、 手机淘宝**
 
-各大知名网站的做法：
+[网站](https://m.taobao.com/#index)
+[适配代码](./lib/taobao_flexible.js)
 
-淘宝则统一定为10 ，不同基准的视觉稿rem与px换算比例不同，iphone6是 1rem = 75px，iphone5 1rem = 64px,可以到https://m.taobao.com/#index验证。
+淘宝统一定为10，iphone6是 1rem = 75px，iphone5 1rem = 64px,可以到https://m.taobao.com/#index验证。不同基准的视觉稿rem与px换算比例不同。
+
+**2、 网易**
+
+[网站](http://3g.163.com/)
+[适配代码](./lib/wangyi_adaptive.js)
+
+并没有做缩放，只使用了相对单位rem。
+
+```
+html的font-size = 布局视口宽度/7.5 = 设备屏幕宽度 / 7.5
+```
+在iphone上，html的font-size为 375/7.5 = 50px
 
 这个比例可以随便设置，根据实际的需求，网易设置7.5时考虑换算简单，淘宝则是考虑兼容vw。
 
-网易[http://3g.163.com/](http://3g.163.com/)： 并没有做缩放，只使用了相对单位rem,html的font-size为 布局视口宽度/7.5 = 设备屏幕宽度 / 7.5
+**3、 美团**
 
+[网站](http://i.meituan.com/)
+[适配代码](./lib/meituan_adaptive.js)
 
+代码比较少，贴上看下。讲真，没明白为啥这么干，dpr>=2的都处理成2了，然后html的font-size设置成50*dpr，现在设备dpr基本都是>=2的，那不是没有做到适配吗？
 
-[仙女座设计师的第五个故事-next web](https://www.slideshare.net/kthcorp/5-nextweb20130221)
+```javascript
+ //根据屏幕大小及dpi调整缩放和大小
+(function() {
+    var scale = 1.0;
+    var ratio = 1;
+    if (window.devicePixelRatio >= 2) {
+        scale *= 0.5;
+        ratio *= 2;
+    }
+    var text = '<meta name="viewport" content="initial-scale=' + scale + ', maximum-scale=' + scale +', minimum-scale=' + scale + ', width=device-width, user-scalable=no" />';
+    document.write(text);
+    document.documentElement.style.fontSize = 50*ratio + "px";
+})();
+    
+```
+
 
 
 
