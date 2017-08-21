@@ -1,0 +1,113 @@
+/*按视觉稿尺寸*/
+.image-section{
+	width: 100%;
+	height: 6.13rem;
+	background-color: #e1e1e1;
+	display: flex;
+	display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+	align-items: center;
+	justify-content: center;
+}
+.image-section img{
+	width: 5.33rem;
+	height: 5.33rem;
+	background-size: cover;
+}
+.tag-section{
+	background-color: #fff;
+}
+
+.tag-list{
+	padding: 0.4rem 0.4rem 0 0.4rem;
+}
+
+.tag-item{
+	margin-top: 0.13rem;
+}
+
+header{
+	font-size: 0.373rem;
+	color: #111;
+}
+header .tip{
+	font-size: 0.32rem;
+	color: #999;
+}
+.tag-item li{
+	display: inline-block;
+	width: 1.973rem;
+	height: 0.773rem;
+	line-height: 0.773rem;
+	text-align: center;
+	border: 1px solid #BBBBBB;
+	border-radius: 0.053rem;
+	color: #666;
+	font-size: 0.32rem;
+	margin-bottom: 0.26rem;
+	margin-right: 0.26rem;
+}
+
+.tag-item ol li:last-child{
+	margin-right: 0;
+}
+
+.tag-item ol{
+	margin-top: 0.16rem;
+	display: flex;
+	display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+.tag-item li.active{
+	position: relative;
+	color: #ff6633;
+	border: 0.01rem solid #ff6633;
+	background-color: #FFF1ED;
+}
+
+.tag-item li.active::after{
+	display: inline-block;
+	content: '';
+	width: 0.4rem;
+	height: 0.4rem;
+	background-image: url(../image/check@2x.png);
+	background-size: 100% 100%;
+    position: absolute;
+    top: -0.2rem;
+    right: -0.2rem;
+}
+
+.desc-section{
+    position: relative;
+	margin: 0.26rem 0 0.4rem;
+	background-color: #fff;
+	padding: 0.4rem;
+}
+
+.desc-section textarea{
+	width: 100%;
+	min-height: 2rem;
+	outline: 0;
+	font-size: 0.37rem;
+	line-height: 1.5;
+	margin-top: 0.13rem;
+}
+.desc-section .count{
+    position: absolute;
+    right: 0.4rem;
+    bottom: 0.26rem;
+    font-size: 0.32rem;
+    color: #ccc;
+}

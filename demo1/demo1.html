@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>整体缩放</title>
+	<meta charset="utf-8">
+	<meta name="author" content="chang20159">
+	<meta name="description" content="设定布局视口宽度，整体缩放">
+	<meta name="viewport" content="width=750,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+	<link rel="stylesheet" type="text/css" href="./demo1.css">
+	<!-- 视觉稿是750px的 -->
+	<!-- width设置成750，按视觉稿尺寸写样式-->
+	<style type="text/css">
+		html{
+			font-family: PingFangSC-Regular;
+			background-color: #f0f0f0;
+		}
+		ul,ol,li{
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+		textarea{
+			padding: 0;
+			resize: none;
+		}
+		textarea::-webkit-input-placeholder{
+			color: #ccc !important;
+		}
+	</style>
+	<script type="text/javascript">
+		(function(){
+			var doc = window.document;
+			var metaEl = doc.querySelector('meta[name="viewport"]');
+			if(!metaEl){
+				metaEl = doc.createElement("meta");
+        		metaEl.setAttribute("name", "viewport");
+			}
+			// debugger
+			var metaCtt = metaEl ? metaEl.content : '';
+			var matchWidth = metaCtt.match(/width=([^,\s]+)/);
+			var width = matchWidth ? matchWidth[1] : 750
+			if(width == 'device-width'){return}
+			
+			var screenWidth = window.screen.width;
+			var scale = screenWidth/width;
+			metaEl.setAttribute("content", "width="+ width +",user-scalable=no,initial-scale=" + scale + ",maximum-scale=" + scale + ",minimum-scale=" + scale);
+		})()
+	</script>
+</head>
+<body>
+	<div class="container">
+		<!-- 图片 -->
+		<div class="image-section">
+			<img src="https://img.meituan.net/beautyimg/0e03672ea40f4f692f193349b86aeb90299167.jpg%40200w_200h_1e_1c_1l_100q%7Cwatermark%3D0"/>
+		</div>
+		<!-- 选择图片标签 -->
+		<div class="tag-section">
+			<ul class="tag-list">
+				<li class="tag-item">
+					<header>添加到相册</header>
+					<ol>
+						<li>豹纹</li>
+						<li class="active">爆款专区</li>
+						<li>五月专区</li>
+					</ol>
+				</li>
+				<li class="tag-item">
+					<header>选择部位</header>
+					<ol>
+						<li class="active">手部美甲</li>
+						<li>足部美甲</li>
+					</ol>
+				</li>
+				<li class="tag-item">
+					<header>
+						<span>选择图片标签</span>
+						<span class="tip">（让用户更快找到款式，6个标签以内）</span>
+					</header>
+					<ol>
+						<li class="active">早春</li>
+						<li>盛夏</li>
+						<li>金秋</li>
+						<li>暖冬</li>
+					</ol>
+					<!-- <ol>
+						<li>万圣节</li>
+						<li>情人节</li>
+						<li>新年</li>
+						<li class="active">约会</li>
+					</ol>
+					<ol>
+						<li>爆款</li>
+						<li>转运</li>
+						<li class="active">人气</li>
+						<li>显白</li>
+					</ol> -->
+					<ol>
+						<li>脱单</li>
+						<li>直男最爱</li>
+						<li class="active">纯色</li>
+						<li>+自定义</li>
+					</ol>
+				</li>
+			</ul>	
+		</div>
+		<!-- 图片描述 -->
+		<div class="desc-section">
+			<header>
+				<span>添加图片描述</span>
+				<span class="tip">（介绍款式特点，会更吸引顾客选择哦～）</span>
+			</header>
+			<textarea autofocus maxlength="50" placeholder="例如：法式猫眼熟女们最喜欢，本店热卖"></textarea>
+			<span class="count">0/50</span>
+		</div>
+	</div>
+</body>
+</html>
