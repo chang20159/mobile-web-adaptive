@@ -168,7 +168,7 @@ img{
 	设置0.5px，在dpr=2的设备中对应1个物理像素，在dpr=2的设备中对应1.5个物理像素。
 	而且在dpr=2的设备中设置0.5px不一定能达到我们想要的效果，看下面：
 	
-	![](./demo2/border.png)
+	<img src="./demo2/border.png" width="400"/>
 	
 	明明设置的0.5px，但浏览器实际还是按1px处理的。ios7以下，android等其他系统里，0.5px会被当成为0px处理？
 	
@@ -231,7 +231,6 @@ metaEl.setAttribute("content", "width=device-width,user-scalable=no,initial-scal
 这个问题可以在待会讲布局适配时解决，布局适配的目的是让元素在不同设备上占比一致（与视觉稿相同。）
 
 
-
 #### 2.2、解决布局适配问题
 
 
@@ -240,11 +239,11 @@ metaEl.setAttribute("content", "width=device-width,user-scalable=no,initial-scal
 - 不同屏幕大小的手机都是一样的高，在小屏手机中就需要向下滚动查看。
 - 选择图片标签下一行展示4个，但在大屏手机中右边的空白就比较大。
 
-那我们希望，元素在布局视口中的占比在不同设备上都相同
+那我们希望，元素在布局视口中的占比（包括元素宽高、边距等）在不同设备上都相同
 
-不同设备分辨率不同，同一份样式怎么让元素占比相同呢？用px肯定是不行的，我们考虑rem。
+同一份样式怎么让元素占比相同呢？用绝对单位px肯定是不行的，我们考虑相对单位rem。
 
-以下像素个数都是横向的
+假如有个宽可以表示为20rem的元素：
 
 |css样式|css像素个数|
 |:--|:--|
@@ -269,7 +268,7 @@ html元素的font-size = 布局视口宽度 ／ 常量值
 
 这个常量值可以是任意一个常数，但为了写样式方便，我们会做这样的考虑：
 
-我们用的视觉稿 iphone6，在缩放比例为1时，布局视口宽度=375，如果取这个常量值为 7.5，
+我们用的视觉稿 iphone6，在缩放比例为1时，布局视口宽度=375，如果取这个常量值为 3.75，
 
 iphone6中html元素的font-size = 375 ／ 3.75 = 100
 
@@ -289,6 +288,7 @@ html元素的font-size = 布局视口宽度 / 7.5
 ```
 html元素的font-size = 布局视口宽度 / 6.4
 ```
+大概的实现就是这样子：
 
 ```javascript
 var doc = document;
@@ -327,9 +327,9 @@ setTimeout(function(){
 为了rem与px换算方便，选定的比例值可以让html元素的font-size为100px。
 iphone6就是7.5，iphone5就是6.4，不同基准的视觉稿rem与px换算比例都是100. 
 
-最后，如果不想动态适配的内容，可以直接使用px单位，比如字体。
+最后，如果不想动态适配的内容，可以直接使用px单位，比如字体，还有1px边框。
 
-### 各大知名网站的做法
+### 淘宝和网易的做法
 这里讲的适配方案是今天[2017-08-11]的，以后网站方案可能会有改动，所以我把代码保存下来了，可以看**适配代码**
 
 **1、 手机淘宝**
@@ -353,28 +353,6 @@ html的font-size = 布局视口宽度/7.5 = 设备屏幕宽度 / 7.5
 
 这个比例可以随便设置，根据实际的需求，网易设置7.5时考虑换算简单，淘宝则是考虑兼容vw。
 
-**3、 美团**
-
-[网站](http://i.meituan.com/)
-[适配代码](./lib/meituan_adaptive.js)
-
-代码比较少，贴上看下。讲真，没明白为啥这么干，dpr>=2的都处理成2了，然后html的font-size设置成50*dpr，现在设备dpr基本都是>=2的，那不是没有做到适配吗？
-
-```javascript
- //根据屏幕大小及dpi调整缩放和大小
-(function() {
-    var scale = 1.0;
-    var ratio = 1;
-    if (window.devicePixelRatio >= 2) {
-        scale *= 0.5;
-        ratio *= 2;
-    }
-    var text = '<meta name="viewport" content="initial-scale=' + scale + ', maximum-scale=' + scale +', minimum-scale=' + scale + ', width=device-width, user-scalable=no" />';
-    document.write(text);
-    document.documentElement.style.fontSize = 50*ratio + "px";
-})();
-    
-```
 
 
 

@@ -1,3 +1,5 @@
+@import '../style/normalize.css';
+@import '../style/common.css';
 /*按视觉稿尺寸*/
 .image-section{
 	width: 100%;

@@ -1,4 +1,6 @@
-/*按视觉稿尺寸*/
+@import '../style/normalize.css';
+@import '../style/common.css';
+/*视觉稿尺寸除以2*/
 .image-section{
 	width: 100%;
 	height: 230px;
