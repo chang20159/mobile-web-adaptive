@@ -273,33 +273,23 @@ metaEl.setAttribute("content", "width=device-width,user-scalable=no,initial-scal
 html元素的font-size = 布局视口宽度 ／ 常量值
 ```
 
-这个常量值可以是任意一个常数，但为了写样式方便，我们会做这样的考虑：
+这个常量值可以是任意一个常数，但为了写样式方便，我们会做一些考虑，例如：
 
+为了解决前面1px边框retina屏显示的问题，页面缩放了1/dpr，iphone6布局视口的宽度就是：375 * 2 个css像素
 
-我们用的视觉稿 iphone6，在缩放比例为1时，布局视口宽度=375，如果取这个常量值为 3.75，
+我们可以让iphone6中html元素的font-size = 375 * 2 ／ 7.5 = 100，这样可以直接将视觉稿中的尺寸除以100，得到rem单位的数值
 
-iphone6中html元素的font-size = 375 ／ 3.75 = 100
-
-但这时视觉稿中200px的元素对应的宽是750，而页面布局宽375，那我们需要先讲视觉稿中的200px除以2，再除以100，得到 1rem.
-
-其实在缩放比例为1时，iphone6中html元素的font-size = 375 ／ 7 = 50，我们直接用视觉稿中的200px除以50，得到2rem就好了
-
-
-
-如果像前面那样为了解决retina屏显示的问题 缩放了1/dpr,iphone6布局视口的宽度就是：375 * 2 个css像素
-
-iphone6中html元素的font-size = 375 * 2 ／ 7.5 = 100
-
-对于以iphone6为基准的视觉稿，并且缩放1/dpr,html元素的font-size 与 布局视口宽度视口的比例可以
+对于以iphone6为基准的750视觉稿，并且缩放1/dpr，html元素的font-size 与 布局视口宽度视口的比例可以是:
 
 ```
 html元素的font-size = 布局视口宽度 / 7.5
 ```
-对于以iphone5为基准的视觉稿，并且缩放1/dpr
+对于以iphone5为基准的640视觉稿，并且缩放1/dpr
 
 ```
 html元素的font-size = 布局视口宽度 / 6.4
 ```
+
 大概的实现就是这样子：
 
 ```javascript
@@ -321,6 +311,7 @@ setTimeout(function(){
 	docEl.style.fontSize = width / 7.5 + 'px';
 })
 ```
+因为scale=1/dpr && 基于750宽的视觉稿，元素的css样式（rem）可以直接由视觉稿尺寸除以100
 
 最后的效果是： 
 
@@ -329,6 +320,60 @@ setTimeout(function(){
 [demo5](http://chang20159.com/mobile-web-adaptive/demo5/demo5.html)
 
 <img src="./demo4/demo4_200_200_10.png">
+
+**那有人会问啦，我的视觉稿不是基于iphone6的，但给的是一倍图宽375怎么办？**
+
+视觉稿一般有两种类型： 一倍图 和 二倍图，比如基于iphone6的：
+
+画布宽750，元素400 x 400
+画布宽375，元素200 x 200
+
+缩放一般有两种：
+
+scale = 1，布局视口宽度 = 375个css像素
+scale = 1/dpr，布局视口宽度 = 750个css像素
+ 
+如果视觉稿选择画布宽750，并且scale=1，那元素css像素应该由**视觉稿中的尺寸除以2**
+如果视觉稿选择画布宽375，并且scale=1/dpr，那元素css像素应该由**视觉稿中的尺寸乘以2**
+其他情况，元素css像素值就是视觉稿中的值。
+
+知道这个之后，先决定px与rem的换算值：html元素的font-size，再写css样式（rem）。举几个例子：
+
+- 如果视觉稿选择画布宽750，并且scale=1，html元素的font-size = 375 / 7.5 = 50，400／2/50= 4rem
+  
+  ```
+  img{
+	  width: 4rem;
+	  height: 4rem;
+  }
+  ```
+
+- 如果视觉稿选择画布宽375，并且scale=1/dpr，html元素的font-size = 750 / 7.5 = 100，200 * 2 /100 = 4rem
+
+```
+  img{
+	  width: 4rem;
+	  height: 4rem;
+  }
+```
+
+- 画布宽750 & scale=1/dpr，html元素的font-size = 750 / 7.5 = 100，400 ／ 100 = 4rem
+
+```
+  img{
+	  width: 4rem;
+	  height: 4rem;
+  }
+```
+
+- 画布宽375 & scale=1，html元素的font-size = 375 / 7.5 = 50，200 ／ 50 = 4rem
+
+```
+  img{
+	  width: 4rem;
+	  height: 4rem;
+  }
+```
 
 #### 总结
 
@@ -363,9 +408,9 @@ iphone6就是7.5，iphone5就是6.4，不同基准的视觉稿rem与px换算比�
 ```
 html的font-size = 布局视口宽度/7.5 = 设备屏幕宽度 / 7.5
 ```
-在iphone上，html的font-size为 375/7.5 = 50px
+在iphone6上，html的font-size为 375/7.5 = 50px，如果他们的视觉稿是1倍图，那就是直接除以50来写css的，如果是二倍图，就是除以100来写css的。
 
-这个比例可以随便设置，根据实际的需求，网易设置7.5时考虑换算简单，淘宝则是考虑兼容vw。
+这个比例可以随便设置，根据实际的需求，网易设置7.5时考虑换算简单，淘宝设置10则是考虑兼容vw。
 
 
 
