@@ -33,6 +33,7 @@
 header{
 	font-size: 28px;
 	color: #111;
+	margin-bottom: 20px;
 }
 header .tip{
 	font-size: 24px;
@@ -57,7 +58,6 @@ header .tip{
 }
 
 .tag-item ol{
-	margin-top: 12px;
 	display: flex;
 	display: -webkit-box;
     display: -moz-box;

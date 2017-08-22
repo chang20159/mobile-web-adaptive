@@ -33,6 +33,7 @@
 header{
 	font-size: 0.373rem;
 	color: #111;
+	margin-bottom: 0.267rem;
 }
 header .tip{
 	font-size: 0.32rem;
@@ -48,8 +49,8 @@ header .tip{
 	border-radius: 4px;
 	color: #666;
 	font-size: 0.32rem;
-	margin-bottom: 0.26rem;
-	margin-right: 0.26rem;
+	margin-bottom: 0.267rem;
+	margin-right: 0.267rem;
 }
 
 .tag-item ol li:last-child{
@@ -57,7 +58,6 @@ header .tip{
 }
 
 .tag-item ol{
-	margin-top: 0.16rem;
 	display: flex;
 	display: -webkit-box;
     display: -moz-box;
