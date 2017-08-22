@@ -72,7 +72,7 @@
 })()
 ```
 
-[demo1](./demo1/demo1.html)		
+[demo1](http://chang20159.com/mobile-web-adaptive/demo1/demo1.html)		
 
 下面是依次在iphone6 plus，iphone6，iphone5上的展示效果。
 
@@ -126,7 +126,7 @@
 ```
 这种情况下有什么效果呢？
 
-[demo2](./demo2/demo2.html)
+[demo2](http://chang20159.com/mobile-web-adaptive/demo2/demo2.html)
 
 图片太长，横着放了^^
 
@@ -222,7 +222,7 @@ metaEl.setAttribute("content", "width=device-width,user-scalable=no,initial-scal
 
 那现在效果是什么样子呢？
 
-[demo3](./demo3/demo3.html)
+[demo3](http://chang20159.com/mobile-web-adaptive/demo3/demo3.html)
 
 <img src="./demo3/demo3_200_200.png"/>
 
@@ -312,7 +312,8 @@ setTimeout(function(){
 
 最后的效果是： 
 
-[demo4](./demo4/demo4.html)
+[demo4](http://chang20159.com/mobile-web-adaptive/demo4/demo4.html)
+[demo5](http://chang20159.com/mobile-web-adaptive/demo5/demo5.html)
 
 <img src="./demo4/demo4_200_200_10.png">
 
