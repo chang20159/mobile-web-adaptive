@@ -1,2 +1,2 @@
-- [移动web基础知识](http://chang20159.com/移动web基础知识/)
+- [移动web基础知识](http://chang20159.com/移动端web基础知识/)
 - [移动端适配实践](http://chang20159.com/移动端适配实践/)
